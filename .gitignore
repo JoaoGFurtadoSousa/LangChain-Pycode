@@ -5,3 +5,7 @@ venv
 venv/
 
 .venv
+
+django-question.db
+
+*.db
