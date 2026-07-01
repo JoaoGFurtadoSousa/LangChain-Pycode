@@ -7,7 +7,7 @@ from decouple import config
 
 
 
-db_connection = SQLDatabase.from_uri() # Realiza a conexão com o banco
+db_connection = SQLDatabase.from_uri("postgresql+psycopg2://postgres:Tnext%40250@localhost:5432/managerDb") # Realiza a conexão com o banco
 
 model = ChatGoogleGenerativeAI(model= "gemini-3.1-flash-lite",
                              api_key = config("GOOGLE_API_KEY"))
@@ -21,7 +21,7 @@ tools_db = SQLDatabaseToolkit(
 agent = create_agent(
     model = model,
     tools= tools_db.get_tools(),
-    system_prompt=("Você é especialista em banco de dados e precisa pegar e retornar a imagem da solicitação do usuario na tabela garagem_permanencia. Filtre pelos ultimos dois registros e retorne a foto de entrada")
+    system_prompt=("Você é especialista em banco de dados e precisa pegar e retornar inteiramente a string da img_entrada na tabela garagem_permanencia.")
 )
 
 # chain = agent | StrOutputParser()
@@ -30,7 +30,7 @@ response = agent.invoke({
     "messages": [
         {
             "role": "user",
-            "content": "Retorne os dois últimos registros"
+            "content": "Retorne a string inteira do campo img_entrada do ultimo registro. É necessario a string inteira"
         }
     ]
 })
